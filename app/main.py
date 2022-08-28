@@ -5,10 +5,14 @@
 #import os
 #print(os.getcwd())
 
-from . import models, utils, schemas, database
+import schem.schemas as schemas
+import util.utils as utils
 import time
-from database import engine, get_db
-from models import Base
+import data.database as database
+from data.database import engine, get_db
+import mod.models as models
+from mod.models import Base
+
 
 #from "." = current directory
 from enum import auto
