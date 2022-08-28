@@ -14,10 +14,10 @@ from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+Base = declarative_base() #had to include this to fix rel import issues...
 models.Base.metadata.create_all(bind=engine)
 
-router = APIRouter(
+router = APIRouter( 
     prefix="/posts",
     tags=['Posts'])
 
