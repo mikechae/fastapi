@@ -48,3 +48,7 @@ class UserOut(BaseModel):
     class Config:
         orm_mode=True
     #we left out password as the user has no need to see their password
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str

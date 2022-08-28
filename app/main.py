@@ -13,10 +13,9 @@ from fastapi import Depends, FastAPI, HTTPException, Response, status
 from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
-from .routers import posts, user
+from .routers import posts, user, auth
 
 Base = declarative_base()
-
 models.Base.metadata.create_all(bind=engine)
 
 
@@ -64,3 +63,4 @@ def find_index_post(id):
 
 app.include_router(posts.router) #when get HTTP request, include posts.router when going down list
 app.include_router(user.router)
+app.include_router(auth.router)
