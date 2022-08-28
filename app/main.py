@@ -22,9 +22,6 @@ from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 
 
-
-
-
 models.Base.metadata.create_all(bind=engine)
 
 
