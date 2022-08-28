@@ -5,14 +5,9 @@
 #import os
 #print(os.getcwd())
 
-import schem.schemas as schemas
-import util.utils as utils
+from . import schemas, utils, database, models
 import time
-import data.database as database
-from data.database import engine, get_db
-import mod.models as models
-from mod.models import Base
-
+from .database import engine, get_db
 
 #from "." = current directory
 from enum import auto
@@ -24,7 +19,9 @@ import psycopg2
 from fastapi import Depends, FastAPI, HTTPException, Response, status
 from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
 
 models.Base.metadata.create_all(bind=engine)
 
