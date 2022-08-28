@@ -1,4 +1,6 @@
 import time
+
+from app import oauth2
 from .. import schemas, models
 from ..database import engine, get_db
 
@@ -74,7 +76,8 @@ def get_posts(db: Session = Depends(get_db)):
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
 #include reference to responses in decorator using response_model=nameofmodel
 
-def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
+def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), get_current_user: 
+int = Depends(oauth2.get_current_user)):
 
     ''' 
     #cursor.execute("""INSERT INTO posts (title, content, published) VALUES ({post.title},{post.content}, {post.published})""") 
