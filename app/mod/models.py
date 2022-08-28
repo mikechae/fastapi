@@ -1,14 +1,6 @@
-'''import importlib.util
-import sys
-spec = importlib.util.spec_from_file_location("database.py","/Users/mikechae/Documents/fastapi/app/data/database.py")
-database = importlib.util.spec_from_file_location(spec)
-sys.modules["database"] = database
-spec.loader.exec_module(database)
+from sqlalchemy.ext.declarative import declarative_base
 
-'''
-
-from ..data import database
-from data.database import Base
+Base = declarative_base()
 
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy import null
