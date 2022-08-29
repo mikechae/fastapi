@@ -1,18 +1,18 @@
 from email.policy import HTTP
 from os import access
+from tokenize import Token
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-
-
 from .. import database, schemas, models, utils, oauth2
+
 
 router = APIRouter(
     tags=['Authentication']
 )
 
-@router.post('/login')
+@router.post('/login') #,response_model=schemas.Token
 def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
 
     '''
@@ -43,3 +43,5 @@ def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session =
     access_token = oauth2.create_access_token(data = {"user_id": user.id}) #again this will be payload
 
     return {"token": access_token, "token type": "bearer"}
+
+
