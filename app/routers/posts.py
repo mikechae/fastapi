@@ -1,7 +1,7 @@
 import time
 
 from app import oauth2
-from .. import schemas, models
+from .. import schemas, models, oauth2
 from ..database import engine, get_db
 
 #from "." = current directory
@@ -76,8 +76,8 @@ def get_posts(db: Session = Depends(get_db)):
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
 #include reference to responses in decorator using response_model=nameofmodel
 
-def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), get_current_user: 
-int = Depends(oauth2.get_current_user)):
+def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), current_user: 
+int = Depends(oauth2.get_current_user)): #oauth2 dependency means: user must be logged in before creating a post
 
     ''' 
     #cursor.execute("""INSERT INTO posts (title, content, published) VALUES ({post.title},{post.content}, {post.published})""") 
@@ -97,6 +97,7 @@ int = Depends(oauth2.get_current_user)):
     #db.refresh(new_post) #this is equivalent to "RETURNING" SQL method
     '''
     #more efficient method
+    print(current_user.email) #returns user email that created the post
     new_post = models.Post(**post.dict()) #unpacking dictionary
     db.add(new_post)
     db.commit()
@@ -111,7 +112,8 @@ def get_latest_post():
 
 #get individual object
 @router.get("/{id}", response_model=schemas.Post)
-def get_post(id: int, db: Session = Depends(get_db)): #"int" performs pre-validation via FastAPI
+def get_post(id: int, db: Session = Depends(get_db), current_user: 
+int = Depends(oauth2.get_current_user)): #"int" performs pre-validation via FastAPI
     
     
     #cursor.execute("""SELECT * FROM posts WHERE id = %s """, (str(id),)) 
@@ -132,7 +134,8 @@ def get_post(id: int, db: Session = Depends(get_db)): #"int" performs pre-valida
     # find index in the array that matches the required {id}
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int, db: Session = Depends(get_db)):
+def delete_post(id: int, db: Session = Depends(get_db), current_user: 
+int = Depends(oauth2.get_current_user)):
     
     '''
 
@@ -155,7 +158,8 @@ def delete_post(id: int, db: Session = Depends(get_db)):
 
 #update post
 @router.put("/{id}", response_model=schemas.Post)
-def update_post(id: int, updated_post: schemas.PostCreate, db: Session = Depends(get_db)): 
+def update_post(id: int, updated_post: schemas.PostCreate, db: Session = Depends(get_db), current_user: 
+int = Depends(oauth2.get_current_user)): 
     #apply "Post" schema outlined before
     #be careful about schema and variable naming conflicts; changed name from "post" to "updated_post"
 
