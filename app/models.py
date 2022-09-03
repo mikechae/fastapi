@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -17,13 +18,15 @@ class Post(Base): #have to extend "Base" model
     published = Column(Boolean, server_default='True', nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     user_id = Column(Integer, ForeignKey("users.id",ondelete="CASCADE"), nullable=False) 
+    
+    owner = relationship("User")
     #reference table for FK config
     '''
     #use db migration tool to update table in DB (like alembic)
     #sqlalchemy searches db to find table named posts, if not, it creates it
     #if yes, it leaves it alone
     '''
-
+    
 #class to handle user registration (need to define new postgres table)
 
 class User(Base):
@@ -33,4 +36,5 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
+#creates property in each post to fetch User data
 

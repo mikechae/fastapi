@@ -60,8 +60,8 @@ def find_index_post(id):
             return i
 
 
-#get all posts (for logged in user)
-@router.get("/", response_model=List[schemas.PostResponse]) 
+#get all posts
+@router.get("/", response_model=List[schemas.Post]) 
 #"List" allows us to return data in the apprpriate schema
 
 def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
@@ -71,7 +71,8 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
     #posts = cursor.fetchall()
     '''
     #below is ORM query
-    posts = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
+    posts = db.query(models.Post).all() #can add ".filter(models.Post.user_id 
+                                        #== current_user.id)" to query to filter by current user
     return posts
 
 #create post    
@@ -112,7 +113,7 @@ def get_latest_post():
 
 
 #get individual object
-@router.get("/{id}", response_model=schemas.PostBase)
+@router.get("/{id}", response_model=schemas.Post)
 def get_post(id: int, db: Session = Depends(get_db), current_user: 
 int = Depends(oauth2.get_current_user)): #"int" performs pre-validation via FastAPI
     

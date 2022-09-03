@@ -21,10 +21,25 @@ class PostCreate(PostBase): #inherits all fields of the model it extends via "Po
 
 #when updating, we want user to specify all changes, don't set default value in these situations
 
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+    #we left out password as the user has no need to see their password
+
+
 class Post(PostBase):
     id: int
     created_at: datetime
-    owner_id: int
+    user_id: int
+    owner: UserOut  #can return pydantic model
+    
+    class Config:
+        orm_mode = True
 
 
 #below models are for responses back to user
@@ -46,13 +61,6 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
-class UserOut(BaseModel):
-    id: int
-    email: EmailStr
-    created_at: datetime
-    class Config:
-        orm_mode=True
-    #we left out password as the user has no need to see their password
 
 class UserLogin(BaseModel):
     email: EmailStr
