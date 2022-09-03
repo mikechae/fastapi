@@ -14,6 +14,7 @@ from fastapi import Depends, FastAPI, HTTPException, Response, status, APIRouter
 from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
+from typing import Optional
 
 Base = declarative_base() #had to include this to fix rel import issues...
 models.Base.metadata.create_all(bind=engine)
@@ -64,15 +65,18 @@ def find_index_post(id):
 @router.get("/", response_model=List[schemas.Post]) 
 #"List" allows us to return data in the apprpriate schema
 
-def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), 
+limit: int = 10, skip: int = 0, search: Optional[str]= ""):
     '''
-    #below is SQL hard code
+    #below is SQL hard code 
     #cursor.execute("""SELECT * FROM posts""")
     #posts = cursor.fetchall()
     '''
     #below is ORM query
-    posts = db.query(models.Post).all() #can add ".filter(models.Post.user_id 
-                                        #== current_user.id)" to query to filter by current user
+    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    #the appended ".limit(limit)" is the query parameter implementation
+    #the appended ".offset(skip)" is another query parameter implementation  
+    #can add ".filter(models.Post.user_id == current_user.id)" to query to filter by current user
     return posts
 
 #create post    
