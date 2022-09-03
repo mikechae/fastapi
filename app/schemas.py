@@ -8,23 +8,23 @@ from .database import Base
 
 
 # request "Get" method url: "/"
-class Post(BaseModel):
+class PostBase(BaseModel):
     title: str
     content: str
     published: bool = True
     class Config:
         orm_mode=True
 
-class PostBase(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-
 
 class PostCreate(PostBase): #inherits all fields of the model it extends via "PostBase" in this example
     pass
 
 #when updating, we want user to specify all changes, don't set default value in these situations
+
+class Post(PostBase):
+    id: int
+    created_at: datetime
+    owner_id: int
 
 
 #below models are for responses back to user
@@ -34,6 +34,7 @@ class PostResponse(PostBase):
     
     id: int
     created_at: datetime
+    user_id: int  #automatically grabs field from db
     class Config:
         orm_mode=True
 
