@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -35,6 +36,10 @@ class User(Base):
     email = Column(String, nullable=False, unique=True) #unique enables one email per user
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
-
 #creates property in each post to fetch User data
 
+
+class Vote(Base):
+    __tablename__ = "votes"
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)

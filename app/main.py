@@ -6,7 +6,8 @@ from pickle import TRUE
 from xmlrpc.client import Boolean
 from fastapi import FastAPI
 from sqlalchemy.ext.declarative import declarative_base
-from .routers import posts, user, auth
+from .routers import posts, user, auth, vote
+from .config import settings 
 
 Base = declarative_base()
 models.Base.metadata.create_all(bind=engine)
@@ -34,3 +35,4 @@ def find_index_post(id):
 app.include_router(posts.router) #when get HTTP request, include posts.router when going down list
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(vote.router)
