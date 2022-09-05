@@ -2,17 +2,18 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import psycopg2
-from psycopg2.extras import RealDictCursor
 import time
+from psycopg2.extras import RealDictCursor
+from .config import settings
 
 
-SQLALCHEMY_DB_URL = 'postgresql://postgres:se7olutioN@localhost/fastapi'
+SQLALCHEMY_DB_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 #not good to harcode these values in the code
 
 engine = create_engine(SQLALCHEMY_DB_URL)
 
 
-#connecting to DB
+#connecting to DB  
 ''' 
 while True:
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 
 from .. import schemas, models, oauth2
@@ -110,9 +111,13 @@ int = Depends(oauth2.get_current_user)): #oauth2 dependency means: user must be 
     db.refresh(new_post) #this is equivalent to "RETURNING" SQL method
     return new_post
 
-@router.get("/latest")
-def get_latest_post():
-    post = my_posts[len(my_posts)-1]
+
+#get latest post
+@router.get("/latest", response_model=schemas.Post)
+async def get_latest_post(db: Session = Depends(get_db), current_user: 
+int = Depends(oauth2.get_current_user)):
+    post_query = db.query(models.Post).filter(models.Post.user_id == current_user.id).order_by(models.Post.created_at.desc())
+    post = post_query.first()
     return post
 
 
