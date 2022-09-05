@@ -1,23 +1,17 @@
 from . import models
-from .database import engine, get_db
+from .database import engine
 
-from enum import auto
-from pickle import TRUE
-from xmlrpc.client import Boolean
 from fastapi import FastAPI
 from sqlalchemy.ext.declarative import declarative_base
 from .routers import posts, user, auth, vote
-from .config import settings 
 
 Base = declarative_base()
 models.Base.metadata.create_all(bind=engine)
 
 
-from requests import post
-
 app = FastAPI()
 
-
+#personal use: indicator of not updated code
 my_posts = [{"title": "title of post 1", "content": "content of post 1", "id": 1},
 {"title": "favorite foods", "content": "pizza", "id": 2}]
 
