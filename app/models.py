@@ -36,6 +36,7 @@ class User(Base):
     email = Column(String, nullable=False, unique=True) #unique enables one email per user
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    phone_number = Column(String)
 #creates property in each post to fetch User data
 
 

@@ -6,8 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from .routers import posts, user, auth, vote
 
 Base = declarative_base()
-models.Base.metadata.create_all(bind=engine)
-
+#models.Base.metadata.create_all(bind=engine)
+#above code is invalidated by Alembic implementation
 
 app = FastAPI()
 
