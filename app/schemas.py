@@ -57,7 +57,12 @@ class PostResponse(PostBase):
     #need to include above two lines when output is a pydantic model as the
     #model by default is not a dictionary
     
-     
+class PostOut(BaseModel):
+    Post: Post #references schema for returning post data
+    votes: int       
+    class Config:
+        orm_mode=True
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str

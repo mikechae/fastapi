@@ -13,6 +13,7 @@ from xmlrpc.client import Boolean
 import psycopg2
 from fastapi import Depends, FastAPI, HTTPException, Response, status, APIRouter
 from psycopg2.extras import RealDictCursor
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from typing import Optional
@@ -63,21 +64,26 @@ def find_index_post(id):
 
 
 #get all posts
-@router.get("/", response_model=List[schemas.Post]) 
+@router.get("/", response_model=List[schemas.PostOut]) 
 #"List" allows us to return data in the apprpriate schema
 
 def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), 
 limit: int = 10, skip: int = 0, search: Optional[str]= ""):
-    '''
+    ''' 
     #below is SQL hard code 
     #cursor.execute("""SELECT * FROM posts""")
     #posts = cursor.fetchall()
     '''
     #below is ORM query
-    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    posts = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.post_id == models.Post.id, 
+    isouter=True).group_by(models.Post.id).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    #".join" is inherently be a left inner join
+    '''
     #the appended ".limit(limit)" is the query parameter implementation
     #the appended ".offset(skip)" is another query parameter implementation  
     #can add ".filter(models.Post.user_id == current_user.id)" to query to filter by current user
+    '''
+
     return posts
 
 #create post    
@@ -122,7 +128,7 @@ int = Depends(oauth2.get_current_user)):
 
 
 #get individual object
-@router.get("/{id}", response_model=schemas.Post)
+@router.get("/{id}", response_model=schemas.PostOut)
 def get_post(id: int, db: Session = Depends(get_db), current_user: 
 int = Depends(oauth2.get_current_user)): #"int" performs pre-validation via FastAPI
     
@@ -130,7 +136,8 @@ int = Depends(oauth2.get_current_user)): #"int" performs pre-validation via Fast
     #cursor.execute("""SELECT * FROM posts WHERE id = %s """, (str(id),)) 
     #post = cursor.fetchone()
     
-    post = db.query(models.Post).filter(models.Post.id == id).first() 
+    post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.post_id == models.Post.id, 
+    isouter=True).group_by(models.Post.id).filter(models.Post.id == id).first() 
     #instead of using ".all()", this will return first post found matching specified id
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
