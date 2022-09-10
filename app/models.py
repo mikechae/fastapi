@@ -1,11 +1,9 @@
-from tkinter import CASCADE
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy import null
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
