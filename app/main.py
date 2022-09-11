@@ -1,6 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import posts, user, auth, vote 
+from .routers import posts, user, auth, vote
+import os
+import psycopg2
+
+DATABASE_URL = os.environ['DATABASE_URL']
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
 #models.Base.metadata.create_all(bind=engine)
 #above code is invalidated by Alembic implementation
