@@ -15,7 +15,7 @@ engine = create_engine(DB_URL)
 while True:
 
     try:
-        conn = psycopg2.connect(host='localhost',database='fastapi',user='postgres',password='se7olutioN',
+        conn = psycopg2.connect(host='localhost',database='',user='postgres',password='',
         cursor_factory=RealDictCursor) # "cursor_factory" returns column names, which is not shows by default
         cursor = conn.cursor()
         print("Database Connection Successful")
