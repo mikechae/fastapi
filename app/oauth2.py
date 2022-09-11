@@ -13,7 +13,7 @@ ALGORITHM = settings.algorithm
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 # 
 
-#store as env variables, not hard coded
+#store as env variables, not hard code
 
 def create_access_token(data: dict):
     to_encode = data.copy() #want to make copy of data to prevent changing original
