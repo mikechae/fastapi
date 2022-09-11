@@ -5,10 +5,9 @@ from .config import settings
 
 
 #SQLALCHEMY_DB_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
-SQLALCHEMY_DB_URL = 'postgres://ccrcrztxpumssc:1f41065ee03eeb15755c942ad38b46d91ad681183eb1b9ac49e816eed9095e77@ec2-3-214-2-141.compute-1.amazonaws.com:5432/dds8lrs6jf0m51'
 #not good to harcode these values in the code
 
-engine = create_engine(SQLALCHEMY_DB_URL)
+engine = create_engine('postgres://ccrcrztxpumssc:1f41065ee03eeb15755c942ad38b46d91ad681183eb1b9ac49e816eed9095e77@ec2-3-214-2-141.compute-1.amazonaws.com:5432/dds8lrs6jf0m51')
 
 
 #connecting to DB  
